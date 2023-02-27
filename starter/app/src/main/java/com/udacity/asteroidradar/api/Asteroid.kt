@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Asteroid(val id: Long,
                     @Json(name = "name")
-                    val codename: String,
+                    val name: String,
                     @Json(name = "close_approach_date")
                     val closeApproachDate: String,
                     @Json(name = "absolute_magnitude_h")

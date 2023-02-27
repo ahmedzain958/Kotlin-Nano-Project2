@@ -24,7 +24,7 @@ val okHttpClient = OkHttpClient.Builder()
 // Configure retrofit to use the OkHttpClient
 
 interface AsteroidsService {
-    @GET("feed?start_date=2020-02-07&end_date=2020-02-07&api_key=JMDo2pLHkMXDfkSr04w6ZMAgvvUHQeVGUviy5SvR")
+    @GET("feed?start_date=2023-02-27&end_date=2023-03-05&api_key=JMDo2pLHkMXDfkSr04w6ZMAgvvUHQeVGUviy5SvR")
     fun getAsteroids(): Deferred<NeoFeed>
 }
 

@@ -23,12 +23,13 @@ import com.udacity.asteroidradar.api.Network
 import com.udacity.asteroidradar.api.asDatabaseModel
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.asDomainModel
+import com.udacity.asteroidradar.getTodaysDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AsteroidsRepository(private val database: AsteroidDatabase) {
     val asteroids: LiveData<List<Asteroid>> =
-        Transformations.map(database.asteroidDao.getAsteroids()) {
+        Transformations.map(database.asteroidDao.getAsteroids(getTodaysDate())) {
             it.asDomainModel()
         }
 
