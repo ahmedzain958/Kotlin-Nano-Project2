@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.api.Asteroid
 import com.udacity.asteroidradar.main.AsteroidAdapter
 import com.udacity.asteroidradar.main.AsteroidClickListener
@@ -37,6 +38,16 @@ fun bindTextViewToAstronomicalUnit(textView: TextView, number: Double) {
 fun bindTextViewToKmUnit(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.km_unit_format), number)
+}
+
+@BindingAdapter("url")
+fun setImageUrl(imageView: ImageView, url: String?) {
+    url?.let {
+        Picasso.with(imageView.context).load(url)
+            .placeholder(R.drawable.loading_animation)
+            .error(R.drawable.ic_broken_image)
+            .into(imageView)
+    }
 }
 
 @BindingAdapter("velocityText")

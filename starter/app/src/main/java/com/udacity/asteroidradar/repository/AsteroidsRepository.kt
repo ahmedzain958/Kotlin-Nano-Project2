@@ -16,14 +16,15 @@
  */
 package com.udacity.asteroidradar.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.udacity.asteroidradar.api.Asteroid
-import com.udacity.asteroidradar.api.Network
-import com.udacity.asteroidradar.api.asDatabaseModel
+import com.udacity.asteroidradar.api.*
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.asDomainModel
 import com.udacity.asteroidradar.getTodaysDate
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -33,10 +34,35 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
             it.asDomainModel()
         }
 
+    val pictureOfTheDay: LiveData<PictureOfTheDay> =
+        Transformations.map(database.pictureOfTheDayDao.getPictureOfTheDay()) {
+            it?.toDomainModel()
+        }
+
+
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        // implement
+    }
     suspend fun refreshAsteroids() {
-        withContext(Dispatchers.IO) {
+
+        withContext(Dispatchers.IO + coroutineExceptionHandler) {
             val asteroids = Network.asteroids.getAsteroids().await()
             database.asteroidDao.insertAll(*asteroids.asDatabaseModel())
+        }
+    }
+
+
+    suspend fun refreshPictureOfTheDay() {
+        withContext(Dispatchers.IO) {
+            try {
+                val picture = Network.pictureOdTheDayService.getPictureOfTheDayAsync().await()
+                database.pictureOfTheDayDao.insertAll(picture.toDatabaseModel())
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.d(TAG, "PictureOfTheDay retrieval unsuccessful: ${e.message}")
+                }
+            }
         }
     }
 }

@@ -34,6 +34,18 @@ data class DatabaseAsteroid constructor(
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean)
 
+@Entity
+data class ImageOfDay constructor(
+    @PrimaryKey
+    val id: Long,
+    val name: String,
+    val closeApproachDate: String,
+    val absoluteMagnitude: Double,
+    val estimatedDiameter: Double,
+    val relativeVelocity: Double,
+    val distanceFromEarth: Double,
+    val isPotentiallyHazardous: Boolean)
+
 fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid> {
     return map {
         Asteroid(

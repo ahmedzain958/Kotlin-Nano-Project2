@@ -13,10 +13,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _asteroidList = asteroidsRepository.asteroids
     val asteroidList: LiveData<List<Asteroid>> = _asteroidList
 
+    val pictureOfTheDay = asteroidsRepository.pictureOfTheDay
+
 
     init {
         viewModelScope.launch {
             asteroidsRepository.refreshAsteroids()
+        }
+        viewModelScope.launch {
+            asteroidsRepository.refreshPictureOfTheDay()
         }
     }
    class Factory(val app: Application) : ViewModelProvider.Factory {

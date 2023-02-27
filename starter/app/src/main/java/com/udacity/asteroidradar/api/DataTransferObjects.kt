@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.api
 
 import com.udacity.asteroidradar.database.DatabaseAsteroid
+import com.udacity.asteroidradar.database.PictureOfTheDayEntity
 
 
 data class EstimatedDiameter(
@@ -83,4 +84,22 @@ fun NeoFeed.asDatabaseModel(): Array<DatabaseAsteroid> {
                 relativeVelocity = it.close_approach_data.firstOrNull()?.relative_velocity?.kilometers_per_second?.toDouble() ?: 0.0
             )
         }.toTypedArray()
+}
+
+
+
+fun PictureOfTheDay.toDatabaseModel(): PictureOfTheDayEntity {
+    return PictureOfTheDayEntity(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
+}
+
+fun PictureOfTheDayEntity.toDomainModel(): PictureOfTheDay{
+    return PictureOfTheDay(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
 }
