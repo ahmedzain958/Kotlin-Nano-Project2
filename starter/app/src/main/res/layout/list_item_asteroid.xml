@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="com.udacity.asteroidradar.api.Asteroid" />
@@ -12,20 +13,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp">
+        tools:background="@android:color/black"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/asteroidName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:ellipsize="end"
             android:maxLines="1"
             android:text="@{asteroid.name}"
             android:textSize="18sp"
+            tools:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/asteroidHazardLevel"
@@ -48,9 +50,10 @@
             android:id="@+id/asteroidHazardLevel"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@+id/asteroidName"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/asteroidName"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="10dp"
             android:src="@{asteroid.isPotentiallyHazardous ? @drawable/ic_status_potentially_hazardous : @drawable/ic_status_normal}" />
 
 
