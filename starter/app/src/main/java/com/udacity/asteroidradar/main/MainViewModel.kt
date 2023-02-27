@@ -1,15 +1,25 @@
 package com.udacity.asteroidradar.main
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.api.Asteroid
+import com.udacity.asteroidradar.repository.AsteroidsRepository
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private val _asteroidList = MutableLiveData<List<Asteroid>>()
+    private val asteroidsRepository = AsteroidsRepository()
+    private val _asteroidList = asteroidsRepository.asteroids
     val asteroidList: LiveData<List<Asteroid>> = _asteroidList
 
+
     init {
+        viewModelScope.launch {
+            asteroidsRepository.refreshAsteroids()
+        }
+    }
+
+   /* init {
         val asteroid1 = Asteroid(
             1L,
             "Asteroid 1",
@@ -40,7 +50,6 @@ class MainViewModel : ViewModel() {
             0.03,
             false
         )
-
         _asteroidList.value = listOf(asteroid1, asteroid2, asteroid3)
-    }
+    }*/
 }
