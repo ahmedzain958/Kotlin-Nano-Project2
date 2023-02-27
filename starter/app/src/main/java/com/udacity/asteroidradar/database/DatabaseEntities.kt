@@ -23,14 +23,22 @@ import com.udacity.asteroidradar.api.Asteroid
 
 @Entity
 data class DatabaseAsteroid constructor(
-        @PrimaryKey
-        val id: Long,
-        val name: String)
+    @PrimaryKey
+    val id: Long,
+    val name: String,
+)
 
 fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid> {
     return map {
         Asteroid(
-                id = it.id,
-        codename = )
+            id = it.id,
+            codename = it.name,
+            "val closeApproachDate: String",
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            true
+        )
     }
 }

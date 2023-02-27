@@ -1,5 +1,7 @@
 package com.udacity.asteroidradar.api
 
+import com.udacity.asteroidradar.database.DatabaseAsteroid
+
 
 data class EstimatedDiameter(
     val kilometers: Map<String, Double>,
@@ -64,4 +66,15 @@ fun NeoFeed.asDomainModel(): List<Asteroid> {
                 relativeVelocity = it.close_approach_data.firstOrNull()?.relative_velocity?.kilometers_per_second?.toDouble() ?: 0.0
             )
         }
+}
+
+
+fun NeoFeed.asDatabaseModel(): Array<DatabaseAsteroid> {
+    return near_earth_objects.flatMap { it.value }
+        .map {
+            DatabaseAsteroid(
+                id = it.id.toLong(),
+                name = it.name
+            )
+        }.toTypedArray()
 }

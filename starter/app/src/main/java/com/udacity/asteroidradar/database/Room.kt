@@ -15,35 +15,34 @@
  *
  */
 
-package com.example.android.devbyteviewer.database
+package com.udacity.asteroidradar.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.udacity.asteroidradar.database.DatabaseVideo
 
 @Dao
-interface VideoDao {
-    @Query("select * from databasevideo")
-    fun getVideos(): LiveData<List<DatabaseVideo>>
+interface AsteroidDao {
+    @Query("select * from DatabaseAsteroid")
+    fun getAsteroids(): LiveData<List<DatabaseAsteroid>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg videos: DatabaseVideo)
+    fun insertAll(vararg videos: DatabaseAsteroid)
 }
 
-@Database(entities = [DatabaseVideo::class], version = 1)
-abstract class VideosDatabase : RoomDatabase() {
-    abstract val videoDao: VideoDao
+@Database(entities = [DatabaseAsteroid::class], version = 1)
+abstract class AsteroidDatabase : RoomDatabase() {
+    abstract val asteroidDao: AsteroidDao
 }
 
-private lateinit var INSTANCE: VideosDatabase
+private lateinit var INSTANCE: AsteroidDatabase
 
-fun getDatabase(context: Context): VideosDatabase {
-    synchronized(VideosDatabase::class.java) {
+fun getDatabase(context: Context): AsteroidDatabase {
+    synchronized(AsteroidDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    VideosDatabase::class.java,
-                    "videos").build()
+                    AsteroidDatabase::class.java,
+                    "asteroids").build()
         }
     }
     return INSTANCE

@@ -7,6 +7,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class MainFragment : Fragment() {
 
@@ -36,6 +38,16 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.adapter = adapter
 
         setObservers()
+
+
+       /* val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url("https://api.nasa.gov/neo/rest/v1/feed?start_date=2020-02-07&end_date=2020-02-07&api_key=JMDo2pLHkMXDfkSr04w6ZMAgvvUHQeVGUviy5SvR")
+            .build()
+
+        val response = client.newCall(request).execute()
+        val responseBody = response.body?.string()*/
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_overflow_menu, menu)
