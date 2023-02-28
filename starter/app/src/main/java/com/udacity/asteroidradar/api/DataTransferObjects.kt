@@ -72,18 +72,17 @@ fun NeoFeed.asDomainModel(): List<Asteroid> {
 }
 
 
-fun NeoFeed.asDatabaseModel(): Array<DatabaseAsteroid> {
-    return near_earth_objects.flatMap { it.value }
-        .map {
+fun List<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroid> {
+    return map {
             DatabaseAsteroid(
-                id = it.id.toLong(),
+                id = it.id,
                 name = it.name,
-                absoluteMagnitude = it.absolute_magnitude_h,
-                estimatedDiameter = it.estimated_diameter.kilometers["estimated_diameter_min"] ?: 0.0,
-                isPotentiallyHazardous = it.is_potentially_hazardous_asteroid,
-                closeApproachDate = it.close_approach_data.firstOrNull()?.close_approach_date?:"",
-                distanceFromEarth = it.close_approach_data.firstOrNull()?.miss_distance?.kilometers?.toDouble() ?: 0.0,
-                relativeVelocity = it.close_approach_data.firstOrNull()?.relative_velocity?.kilometers_per_second?.toDouble() ?: 0.0
+                absoluteMagnitude = it.absoluteMagnitude,
+                estimatedDiameter = it.estimatedDiameter,
+                isPotentiallyHazardous = it.isPotentiallyHazardous,
+                closeApproachDate = it.closeApproachDate,
+                distanceFromEarth = it.distanceFromEarth,
+                relativeVelocity = it.relativeVelocity
             )
         }.toTypedArray()
 }

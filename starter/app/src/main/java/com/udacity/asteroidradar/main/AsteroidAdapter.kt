@@ -3,16 +3,12 @@ package com.udacity.asteroidradar.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.databinding.ListItemAsteroidBinding
 
-class AsteroidAdapter(private val clickListener: AsteroidClickListener) : RecyclerView.Adapter<AsteroidAdapter.ViewHolder>() {
-    var asteroidsList = listOf<Asteroid>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class AsteroidAdapter(private val clickListener: AsteroidClickListener) : ListAdapter<Asteroid, AsteroidAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -21,22 +17,19 @@ class AsteroidAdapter(private val clickListener: AsteroidClickListener) : Recycl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val asteroid = asteroidsList[position]
-        holder.bind(asteroid, clickListener)
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return asteroidsList.size
-    }
 
-    class ViewHolder(private val binding: ListItemAsteroidBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Asteroid, clickListener: AsteroidClickListener) {
+   inner class ViewHolder(private val binding: ListItemAsteroidBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Asteroid) {
             binding.asteroid = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Asteroid>() {
+    class DiffCallback : DiffUtil.ItemCallback<Asteroid>() {
         override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
             return oldItem === newItem
         }

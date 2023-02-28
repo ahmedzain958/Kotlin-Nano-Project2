@@ -10,6 +10,7 @@ import com.udacity.asteroidradar.getTodaysDate
 import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -21,7 +22,7 @@ interface AsteroidsService {
     fun getAsteroids(
         @Query("start_date") start_date: String = getTodaysDate(),
         @Query("end_date") end_date: String = getDateAfterWeek(),
-    ): Deferred<NeoFeed>
+    ): Deferred<String>
 
 }
 
@@ -39,6 +40,7 @@ private val moshi = Moshi.Builder()
 private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
 //        .baseUrl("https://api.nasa.gov")
+    .addConverterFactory(ScalarsConverterFactory.create())
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
@@ -47,7 +49,6 @@ private val retrofit = Retrofit.Builder()
  * Main entry point for network access. Call like `Network.devbytes.getPlaylist()`
  */
 object Network {
-
 
     val asteroids: AsteroidsService by lazy {
         retrofit.create(AsteroidsService::class.java)

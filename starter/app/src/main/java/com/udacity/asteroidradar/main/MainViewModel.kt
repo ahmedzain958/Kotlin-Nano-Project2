@@ -1,36 +1,65 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel( application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(database)
-    private val _asteroidList = asteroidsRepository.asteroids
-    val asteroidList: LiveData<List<Asteroid>> = _asteroidList
 
     val pictureOfTheDay = asteroidsRepository.pictureOfTheDay
 
 
     init {
         viewModelScope.launch {
-            asteroidsRepository.refreshAsteroids()
+            if (isOnline(application.applicationContext)) {
+                asteroidsRepository.refreshAsteroids()
+            }
         }
         viewModelScope.launch {
-            asteroidsRepository.refreshPictureOfTheDay()
+            if (isOnline(application.applicationContext)) {
+                asteroidsRepository.refreshPictureOfTheDay()
+            }
         }
     }
-   class Factory(val app: Application) : ViewModelProvider.Factory {
-       override fun <T : ViewModel> create(modelClass: Class<T>): T {
-           if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-               @Suppress("UNCHECKED_CAST")
-               return MainViewModel(app) as T
-           }
-           throw IllegalArgumentException("Unable to construct viewmodel")
-       }
-   }
+
+    private val _asteroidList = asteroidsRepository.asteroids
+    val asteroidList: LiveData<List<Asteroid>> = _asteroidList
+    fun isOnline(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val n = cm.activeNetwork
+            if (n != null) {
+                val nc = cm.getNetworkCapabilities(n)
+                //It will check for both wifi and cellular network
+                return nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            }
+            return false
+        } else {
+            val netInfo = cm.activeNetworkInfo
+            return netInfo != null && netInfo.isConnectedOrConnecting
+        }
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return MainViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
+    }
+
+
 }
