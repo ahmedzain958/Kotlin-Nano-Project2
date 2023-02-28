@@ -19,7 +19,8 @@
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:paddingStart="16dp"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:onClick="@{() -> clickListener.onClick(asteroid)}">
 
         <TextView
             android:id="@+id/asteroidName"

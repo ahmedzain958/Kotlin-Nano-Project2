@@ -3,15 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="asteroid"
-            type="com.udacity.asteroidradar.domain.Asteroid" />
+
         <variable
             name="viewModel"
             type="com.udacity.asteroidradar.main.MainViewModel" />
-        <variable
-            name="clickListener"
-            type="com.udacity.asteroidradar.main.AsteroidClickListener" />
+
 
 
     </data>
@@ -20,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_background"
-        android:onClick="@{() -> clickListener.onClick(asteroid)}">
+       >
 
 
     <FrameLayout
