@@ -2,6 +2,8 @@ package com.udacity.asteroidradar.api
 
 import com.udacity.asteroidradar.database.DatabaseAsteroid
 import com.udacity.asteroidradar.database.PictureOfTheDayEntity
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.domain.PictureOfTheDay
 
 
 data class EstimatedDiameter(
@@ -96,7 +98,7 @@ fun PictureOfTheDay.toDatabaseModel(): PictureOfTheDayEntity {
     )
 }
 
-fun PictureOfTheDayEntity.toDomainModel(): PictureOfTheDay{
+fun PictureOfTheDayEntity.toDomainModel(): PictureOfTheDay {
     return PictureOfTheDay(
         mediaType = this.mediaType,
         title = this.title,

@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants.BASE_URL
+import com.udacity.asteroidradar.domain.PictureOfTheDay
 import com.udacity.asteroidradar.getDateAfterWeek
 import com.udacity.asteroidradar.getTodaysDate
 import kotlinx.coroutines.Deferred

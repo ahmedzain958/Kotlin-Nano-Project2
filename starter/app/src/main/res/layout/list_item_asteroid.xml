@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.udacity.asteroidradar.api.Asteroid" />
+        <import type="com.udacity.asteroidradar.domain.Asteroid" />
 
         <variable
             name="asteroid"
-            type="Asteroid" />
+            type="com.udacity.asteroidradar.domain.Asteroid" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

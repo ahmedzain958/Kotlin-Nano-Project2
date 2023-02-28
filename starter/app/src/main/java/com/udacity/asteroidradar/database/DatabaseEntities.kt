@@ -20,7 +20,8 @@ package com.udacity.asteroidradar.database
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.udacity.asteroidradar.api.Asteroid
+import com.udacity.asteroidradar.domain.Asteroid
+import kotlinx.android.parcel.Parcelize
 
 @Entity
 data class DatabaseAsteroid constructor(
@@ -34,17 +35,16 @@ data class DatabaseAsteroid constructor(
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean)
 
-@Entity
-data class ImageOfDay constructor(
-    @PrimaryKey
-    val id: Long,
-    val name: String,
-    val closeApproachDate: String,
-    val absoluteMagnitude: Double,
-    val estimatedDiameter: Double,
-    val relativeVelocity: Double,
-    val distanceFromEarth: Double,
-    val isPotentiallyHazardous: Boolean)
+@Entity(tableName = "picture_of_the_day_table")
+@Parcelize
+data class PictureOfTheDayEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,                           // Created to use as the primary key
+    val url: String,                             // primary key can't be a String
+    val mediaType: String,
+    val title: String
+) : Parcelable
+
 
 fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid> {
     return map {

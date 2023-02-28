@@ -21,22 +21,9 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-@Dao
-interface AsteroidDao {
-    @Query("select * from DatabaseAsteroid where closeApproachDate = :today")
-    fun getAsteroids(today: String): LiveData<List<DatabaseAsteroid>>
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg videos: DatabaseAsteroid)
-}
-@Dao
-interface PictureOfTheDayDao {
-    @Query("select * from picture_of_the_day_table")
-    fun getPictureOfTheDay(): LiveData<PictureOfTheDayEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg pictureOfTheDayEntity: PictureOfTheDayEntity)
-}
-@Database(entities = [DatabaseAsteroid::class], version = 1)
+
+@Database(entities = [DatabaseAsteroid::class, PictureOfTheDayEntity::class], version = 1)
 abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
     abstract val pictureOfTheDayDao: PictureOfTheDayDao
