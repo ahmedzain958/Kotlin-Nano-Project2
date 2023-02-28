@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import okhttp3.OkHttpClient
@@ -31,7 +32,7 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
 
         adapter = AsteroidAdapter(AsteroidClickListener { asteroid ->
-//            viewModel.onAsteroidClicked(asteroid)
+            view?.findNavController()?.navigate(MainFragmentDirections.actionShowDetail(asteroid))
         })
         binding.asteroidRecycler.adapter = adapter
         setObservers()
