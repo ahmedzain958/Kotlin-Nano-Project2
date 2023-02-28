@@ -17,10 +17,13 @@
 package com.udacity.asteroidradar.repository
 
 import android.content.ContentValues.TAG
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.api.*
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.DatabaseAsteroid
@@ -32,9 +35,20 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AsteroidsRepository(private val database: AsteroidDatabase) {
+
+    val weekList =
+        Transformations.map(database.asteroidDao.getByFilterDate(getTodaysDate(), getDayDates(7))) {
+            it.asDomainModel()
+        }
+
+    var todayList = Transformations.map(database.asteroidDao.getAsteroids(getTodaysDate())) {
+        it.asDomainModel()
+    }
+
     val asteroids: LiveData<List<Asteroid>> =
         Transformations.map(loadAsteroids()) {
             it.asDomainModel()
@@ -42,7 +56,7 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
 
     private fun loadAsteroids(): LiveData<List<DatabaseAsteroid>> {
         val asteroidsList = database.asteroidDao.getAsteroids(getTodaysDate())
-      return asteroidsList
+        return asteroidsList
     }
 
     val pictureOfTheDay: LiveData<PictureOfTheDay> =
@@ -55,10 +69,12 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
         // Handle the exception here, for example:
         Log.e(TAG, "Coroutine Exception: $exception")
     }
+
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO + exceptionHandler) {
             val asteroids = Network.asteroids.getAsteroids().await()
-            val parsedAsteroidsList: ArrayList<Asteroid> = parseAsteroidsJsonResult(JSONObject(asteroids))
+            val parsedAsteroidsList: ArrayList<Asteroid> =
+                parseAsteroidsJsonResult(JSONObject(asteroids))
             database.asteroidDao.insertAll(*parsedAsteroidsList.asDatabaseModel())
         }
     }
@@ -76,4 +92,16 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
             }
         }
     }
+
+    val yesterdayFormat = getDayDates(-1)
+    val todayFormat = getDayDates(0)
+    val weekFormat = getDayDates(7)
+    fun getDayDates(calendarAddAmountDay: Int = 0): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, calendarAddAmountDay)
+        val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
+        val currentTime = calendar.time
+        return dateFormat.format(currentTime)
+    }
+
 }

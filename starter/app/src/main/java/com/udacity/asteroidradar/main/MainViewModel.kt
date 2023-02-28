@@ -11,6 +11,7 @@ import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
+enum class FILTER_TYPE { TODAY, WEEK, SAVE }
 
 class MainViewModel( application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
@@ -32,7 +33,14 @@ class MainViewModel( application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private val _asteroidList = asteroidsRepository.asteroids
+    val asteroidFilter = MutableLiveData<FILTER_TYPE>(FILTER_TYPE.TODAY)
+    private val _asteroidList = Transformations.switchMap(asteroidFilter) {
+        when (it) {
+            FILTER_TYPE.TODAY -> asteroidsRepository.todayList
+            FILTER_TYPE.WEEK -> asteroidsRepository.weekList
+            else -> asteroidsRepository.asteroids
+        }
+    }
     val asteroidList: LiveData<List<Asteroid>> = _asteroidList
     fun isOnline(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -61,5 +69,8 @@ class MainViewModel( application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateFilter(filerView: FILTER_TYPE) {
+        asteroidFilter.value = filerView
+    }
 
 }
