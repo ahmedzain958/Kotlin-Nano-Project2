@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.7.21'
+        Jet_kotlin_version = '1.7.21'
         version_navigation = '2.5.3'
         navigationDependencies = [
                 safeArgsPlugin: "androidx.navigation:navigation-safe-args-gradle-plugin:${version_navigation}",
@@ -16,7 +16,7 @@ buildscript {
         
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$Jet_kotlin_version"
         classpath 'com.android.tools.build:gradle:7.3.1'
         classpath navigationDependencies.safeArgsPlugin
         // NOTE: Do not place your application dependencies here; they belong
