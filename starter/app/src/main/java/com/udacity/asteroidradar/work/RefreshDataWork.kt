@@ -38,8 +38,10 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         val database = getDatabase(applicationContext)
         val repository = AsteroidsRepository(database)
         return try {
-           /* repository.refreshAsteroids()
-            repository.refreshPictureOfTheDay()*/
+            with(repository) {
+                refreshAsteroids()
+                refreshPictureOfTheDay()
+            }
             Result.success()
         } catch (e: HttpException) {
             Result.retry()

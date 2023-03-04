@@ -6,11 +6,11 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 @Dao
 interface AsteroidDao {
-    @Query("select * from DatabaseAsteroid where closeApproachDate = :today")
+    @Query("select * from DatabaseAsteroid where closeApproachDate = :today order by closeApproachDate")
     fun getAsteroids(today: String): LiveData<List<DatabaseAsteroid>>
 
 
-    @Query("select * from DatabaseAsteroid")
+    @Query("select * from DatabaseAsteroid order by closeApproachDate")
     fun getSavedAsteroids(): LiveData<List<DatabaseAsteroid>>
 
 

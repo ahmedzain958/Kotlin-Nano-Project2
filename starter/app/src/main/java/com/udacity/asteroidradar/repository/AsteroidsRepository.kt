@@ -41,7 +41,7 @@ import java.util.*
 class AsteroidsRepository(private val database: AsteroidDatabase) {
 
     val weekList =
-        Transformations.map(database.asteroidDao.getByFilterDate(getTodaysDate(), getDayDates(7))) {
+        Transformations.map(database.asteroidDao.getByFilterDate(getDayDates(1), getDayDates(7))) {
             it.asDomainModel()
         }
 
@@ -55,7 +55,7 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
         }
 
     private fun loadAsteroids(): LiveData<List<DatabaseAsteroid>> {
-        val asteroidsList = database.asteroidDao.getAsteroids(getTodaysDate())
+        val asteroidsList = database.asteroidDao.getSavedAsteroids()
         return asteroidsList
     }
 

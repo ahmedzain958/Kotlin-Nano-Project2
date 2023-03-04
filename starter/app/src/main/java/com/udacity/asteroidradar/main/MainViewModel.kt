@@ -24,13 +24,13 @@ class MainViewModel( application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             if (isOnline(application.applicationContext)) {
                 asteroidsRepository.refreshAsteroids()
-            }
-        }
-        viewModelScope.launch {
-            if (isOnline(application.applicationContext)) {
                 asteroidsRepository.refreshPictureOfTheDay()
             }
         }
+       /* viewModelScope.launch {
+            if (isOnline(application.applicationContext)) {
+            }
+        }*/
     }
 
     val asteroidFilter = MutableLiveData<FILTER_TYPE>(FILTER_TYPE.TODAY)

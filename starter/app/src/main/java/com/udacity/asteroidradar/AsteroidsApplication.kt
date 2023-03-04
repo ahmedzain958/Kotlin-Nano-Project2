@@ -55,7 +55,7 @@ class AsteroidsApplication : Application() {
                 .setConstraints(constraints)
                 .build()
 
-        WorkManager.getInstance().enqueueUniquePeriodicWork(
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 RefreshDataWorker.WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 repeatingRequest)
