@@ -55,7 +55,7 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
         }
 
     private fun loadAsteroids(): LiveData<List<DatabaseAsteroid>> {
-        val asteroidsList = database.asteroidDao.getSavedAsteroids()
+        val asteroidsList = database.asteroidDao.getByFilterDate(getTodaysDate(), getDayDates(7))
         return asteroidsList
     }
 
@@ -78,7 +78,14 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
             database.asteroidDao.insertAll(*parsedAsteroidsList.asDatabaseModel())
         }
     }
-
+    suspend fun saveAsteroids() {
+        withContext(Dispatchers.IO + exceptionHandler) {
+            val asteroids = Network.asteroids.getAsteroids(getDayDates(1), getDayDates(8)).await()
+            val parsedAsteroidsList: ArrayList<Asteroid> =
+                parseAsteroidsJsonResult(JSONObject(asteroids))
+            database.asteroidDao.insertAll(*parsedAsteroidsList.asDatabaseModel())
+        }
+    }
 
     suspend fun refreshPictureOfTheDay() {
         withContext(Dispatchers.IO + exceptionHandler) {
@@ -93,9 +100,6 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
         }
     }
 
-    val yesterdayFormat = getDayDates(-1)
-    val todayFormat = getDayDates(0)
-    val weekFormat = getDayDates(7)
     fun getDayDates(calendarAddAmountDay: Int = 0): String {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, calendarAddAmountDay)

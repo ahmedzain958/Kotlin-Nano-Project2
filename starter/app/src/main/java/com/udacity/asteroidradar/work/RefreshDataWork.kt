@@ -39,7 +39,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         val repository = AsteroidsRepository(database)
         return try {
             with(repository) {
-                refreshAsteroids()
+                saveAsteroids()
                 refreshPictureOfTheDay()
             }
             Result.success()
