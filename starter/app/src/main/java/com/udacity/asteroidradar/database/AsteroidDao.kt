@@ -10,14 +10,14 @@ interface AsteroidDao {
     fun getAsteroids(today: String): LiveData<List<DatabaseAsteroid>>
 
 
-    /*@Query("select * from DatabaseAsteroid order by closeApproachDate")
-    fun getSavedAsteroids(): LiveData<List<DatabaseAsteroid>>*/
-
-
     @Query("select * from DatabaseAsteroid where closeApproachDate between :startDate and :endDate order by closeApproachDate")
     fun getByFilterDate(startDate: String, endDate: String): LiveData<List<DatabaseAsteroid>>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg videos: DatabaseAsteroid)
+
+
+    @Query("DELETE FROM DatabaseAsteroid WHERE closeApproachDate = :date")
+    fun deleteAsteroids(date: String)
 }

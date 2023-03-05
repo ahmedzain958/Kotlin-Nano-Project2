@@ -99,6 +99,11 @@ class AsteroidsRepository(private val database: AsteroidDatabase) {
             }
         }
     }
+    suspend fun deleteOldAsteroids() {
+        withContext(Dispatchers.IO) {
+            database.asteroidDao.deleteAsteroids(getDayDates(-1))
+        }
+    }
 
     fun getDayDates(calendarAddAmountDay: Int = 0): String {
         val calendar = Calendar.getInstance()

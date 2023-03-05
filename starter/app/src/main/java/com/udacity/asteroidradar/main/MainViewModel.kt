@@ -25,6 +25,7 @@ class MainViewModel( application: Application) : AndroidViewModel(application) {
             if (isOnline(application.applicationContext)) {
                 asteroidsRepository.refreshAsteroids()
                 asteroidsRepository.refreshPictureOfTheDay()
+                asteroidsRepository.deleteOldAsteroids()
             }
         }
        /* viewModelScope.launch {

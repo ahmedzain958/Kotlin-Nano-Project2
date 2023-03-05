@@ -41,6 +41,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
             with(repository) {
                 saveAsteroids()
                 refreshPictureOfTheDay()
+                deleteOldAsteroids()
             }
             Result.success()
         } catch (e: HttpException) {
